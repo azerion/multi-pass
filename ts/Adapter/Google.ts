@@ -23,7 +23,7 @@ module MultiPass {
 
                 let queueData: string = this.storage.get('queue');
 
-                if ('' === queueData) {
+                if (null === queueData) {
                     return;
                 }
 
@@ -35,7 +35,7 @@ module MultiPass {
             }
 
             private removeUuid(uuid: string) {
-                for (let i = this.queue.length; i >= 0; i--) {
+                for (let i = this.queue.length - 1; i >= 0; i--) {
                     if (this.queue[i].hasOwnProperty('uuid') && this.queue[i].uuid === uuid) {
                         this.queue.splice(i);
                     }

@@ -1,5 +1,5 @@
 /*!
- * multi-pass - version 0.0.1 
+ * multi-pass - version 0.0.5 
  * A simple javascript multivariate testing framework for use with Google Analytics
  *
  * OrangeGames
@@ -19,7 +19,7 @@ var MultiPass;
                 this.storage = Quartz.Storage.getInstance();
                 this.queue = [];
                 var queueData = this.storage.get('queue');
-                if ('' === queueData) {
+                if (null === queueData) {
                     return;
                 }
                 try {
@@ -30,7 +30,7 @@ var MultiPass;
                 }
             }
             GoogleAnalytics.prototype.removeUuid = function (uuid) {
-                for (var i = this.queue.length; i >= 0; i--) {
+                for (var i = this.queue.length - 1; i >= 0; i--) {
                     if (this.queue[i].hasOwnProperty('uuid') && this.queue[i].uuid === uuid) {
                         this.queue.splice(i);
                     }
@@ -106,20 +106,17 @@ var MultiPass;
         };
         Experiment.prototype.applyVariant = function () {
             var variantName = this.storage.get(this.name + ":variant");
-            console.log(this.inSample());
             if (!this.inSample()) {
                 return;
             }
             if (variantName === null) {
                 variantName = this.chooseVariant();
-                console.log(variantName);
                 this.tracker.start(this.name, variantName);
             }
             var varient;
             if ((varient = this.variants[variantName]) != null) {
                 varient.activate(this);
             }
-            console.log(varient);
             this.storage.set(this.name + ":variant", variantName);
             return variantName;
         };
@@ -127,7 +124,6 @@ var MultiPass;
             var variants = Object.keys(this.variants);
             var part = 1.0 / variants.length;
             var pickedPart = Math.floor(Math.random() / part);
-            console.log(variants);
             var variant = variants[pickedPart];
             return variant;
         };

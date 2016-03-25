@@ -13,8 +13,8 @@
     </style>
 </head>
 <body>
-<input type="submit" id="button1" value="Submit" style="display: none;">
-<input type="submit" id="button2" value="Click here" style="display: none;">
+<input type="submit" id="button1" onclick="javascript:goal1.complete();" value="Submit" style="display: none;">
+<input type="submit" id="button2" onclick="javascript:goal2.complete();" value="Click here" style="display: none;">
 <script>
     var exp = new MultiPass.Experiment({
         name: 'Button Test',
@@ -33,6 +33,8 @@
             }
         }
     });
+    var goal1 = exp.addGoal('button1');
+    var goal2 = exp.addGoal('button1');
 </script>
 </body>
 </html>

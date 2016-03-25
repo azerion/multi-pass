@@ -1,0 +1,34 @@
+{
+  "name": "multi-pass",
+  "author": "OrangeGames",
+  "version": "0.0.1",
+  "description": "A simple javascript multivariate testing framework for use with Google Analytics",
+  "contributors": [
+    {
+      "name": "Ale Bles",
+      "email": "a.bles@orangegames.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:orange-games/multi-pass.git"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.githubusercontent.com/orange-games/multi-pass/master/LICENSE"
+    }
+  ],
+  "devDependencies": {
+    "grunt": "0.4.x",
+    "grunt-banner": "^0.6.0",
+    "grunt-contrib-clean": "0.6.0",
+    "grunt-contrib-uglify": "^0.11.0",
+    "grunt-typescript": "0.8.0",
+    "quartz-storage": "^2.0.1",
+    "typescript": "1.8.x"
+  },
+  "engines": {
+    "node": "5.x.x"
+  }
+}

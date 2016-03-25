@@ -1,10 +1,9 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>Phaser Spine Example</title>
+    <title>Multi Pass Example</title>
 
-    <script src="../node_modules/phaser/dist/phaser.js"></script>
-    <script src="../build/phaser-spine.min.js"></script>
+    <script src="../build/multi-pass.min.js"></script>
 
     <style>
         body {
@@ -14,43 +13,26 @@
     </style>
 </head>
 <body>
+<input type="submit" id="button1" value="Submit" style="display: none;">
+<input type="submit" id="button2" value="Click here" style="display: none;">
 <script>
-
-    var buddy, game;
-
-    game = new Phaser.Game(800, 600, Phaser.CANVAS, '', {init: init, preload: preload, create: create});
-
-    function init() {
-        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-    }
-
-    function preload() {
-        game.plugins.add(Fabrique.Plugins.Spine);
-        game.stage.disableVisibilityChange = true;
-
-        game.load.spine('buddy', "assets/buddy_skeleton.json");
-        game.load.image('button1', "assets/btn_01.png");
-        game.load.image('button2', "assets/btn_02.png");
-    }
-
-    function create() {
-
-        //create the spine object
-        buddy = game.add.spine(400, 300, "buddy");
-
-        // play animation
-        buddy.setAnimationByName(0, "idle", true);
-        var newSkin = buddy.getCombinedSkin('outfit02', 'vest', 'mask', 'outfit01');
-
-        var button1 = this.game.add.button(20, 20, 'button1', function () {
-            buddy.setSkinByName('outfit01');
-        });
-
-        var button1 = this.game.add.button(20, 130, 'button2', function () {
-            buddy.setSkin(newSkin);
-        });
-    }
+    var exp = new MultiPass.Experiment({
+        name: 'Button Test',
+        variants: {
+            oneReplayButton: {
+                activate: function () {
+                    var b = document.getElementById("button1");
+                    b.style.display = 'block';
+                }
+            },
+            twoReplayButtons: {
+                activate: function () {
+                    var b = document.getElementById("button2");
+                    b.style.display = 'block';
+                }
+            }
+        }
+    });
 </script>
-
 </body>
 </html>

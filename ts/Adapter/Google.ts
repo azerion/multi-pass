@@ -17,9 +17,9 @@ module MultiPass {
             private queue: GoogleAnalyticsEvent[] = [];
 
             constructor() {
-                if (typeof ga !== 'function') {
-                    console.warn('ga not defined. Please make sure your Universal analytics is set up correctly');
-                }
+                // if (typeof ga !== 'function') {
+                //     console.warn('ga not defined. Please make sure your Universal analytics is set up correctly');
+                // }
 
                 let queueData: string = this.storage.get('queue');
 

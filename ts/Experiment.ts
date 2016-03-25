@@ -61,7 +61,7 @@ module MultiPass {
                 return;
             }
             
-            if (variantName === '') {
+            if (variantName === null) {
                 variantName = this.chooseVariant();
                 this.tracker.start(this.name, variantName);
             }
@@ -88,13 +88,14 @@ module MultiPass {
         }
 
         private inSample(): boolean {
-            let isIn: boolean = 'true' === this.storage.get(this.name +  ':isIn');
-            if (isIn) {
-                return isIn;
+            let isIn: string = this.storage.get(this.name +  ':isIn');
+            if (null !== isIn) {
+                return isIn === 'true';
             }
-            isIn = Math.random() <= this.sample;
-            this.storage.set(this.name + ':isIn', isIn);
-            return isIn;
+
+            let isInreal = Math.random() <= this.sample;
+            this.storage.set(this.name + ':isIn', isInreal);
+            return isInreal;
         }
     }
 }

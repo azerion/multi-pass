@@ -13,11 +13,11 @@ var MultiPass;
     (function (Adapters) {
         var GoogleAnalytics = (function () {
             function GoogleAnalytics() {
+                // if (typeof ga !== 'function') {
+                //     console.warn('ga not defined. Please make sure your Universal analytics is set up correctly');
+                // }
                 this.storage = Quartz.Storage.getInstance();
                 this.queue = [];
-                if (typeof ga !== 'function') {
-                    console.warn('ga not defined. Please make sure your Universal analytics is set up correctly');
-                }
                 var queueData = this.storage.get('queue');
                 if ('' === queueData) {
                     return;
@@ -106,17 +106,20 @@ var MultiPass;
         };
         Experiment.prototype.applyVariant = function () {
             var variantName = this.storage.get(this.name + ":variant");
+            console.log(this.inSample());
             if (!this.inSample()) {
                 return;
             }
-            if (variantName === '') {
+            if (variantName === null) {
                 variantName = this.chooseVariant();
+                console.log(variantName);
                 this.tracker.start(this.name, variantName);
             }
             var varient;
             if ((varient = this.variants[variantName]) != null) {
                 varient.activate(this);
             }
+            console.log(varient);
             this.storage.set(this.name + ":variant", variantName);
             return variantName;
         };
@@ -124,17 +127,18 @@ var MultiPass;
             var variants = Object.keys(this.variants);
             var part = 1.0 / variants.length;
             var pickedPart = Math.floor(Math.random() / part);
+            console.log(variants);
             var variant = variants[pickedPart];
             return variant;
         };
         Experiment.prototype.inSample = function () {
-            var isIn = 'true' === this.storage.get(this.name + ':isIn');
-            if (isIn) {
-                return isIn;
+            var isIn = this.storage.get(this.name + ':isIn');
+            if (null !== isIn) {
+                return isIn === 'true';
             }
-            isIn = Math.random() <= this.sample;
-            this.storage.set(this.name + ':isIn', isIn);
-            return isIn;
+            var isInreal = Math.random() <= this.sample;
+            this.storage.set(this.name + ':isIn', isInreal);
+            return isInreal;
         };
         return Experiment;
     })();

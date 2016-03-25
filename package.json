@@ -1,7 +1,7 @@
 {
   "name": "multi-pass",
   "author": "OrangeGames",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A simple javascript multivariate testing framework for use with Google Analytics",
   "contributors": [
     {

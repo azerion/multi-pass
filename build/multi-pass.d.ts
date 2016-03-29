@@ -31,6 +31,7 @@ declare module MultiPass {
         variants: {
             [name: string]: IVariant;
         };
+        sample?: number;
     }
     class Experiment {
         name: string;
@@ -46,6 +47,7 @@ declare module MultiPass {
         private applyVariant();
         private chooseVariant();
         private inSample();
+        private parseHash();
     }
 }
 declare module MultiPass {

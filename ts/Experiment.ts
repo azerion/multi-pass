@@ -12,6 +12,7 @@ module MultiPass {
         variants: {
             [name: string]: IVariant;
         }
+        sample?: number;
     }
 
     export class Experiment {
@@ -30,8 +31,10 @@ module MultiPass {
         constructor(config: IExperimentConfig) {
             this.name = config.name;
             this.variants = config.variants;
-            
-            this.applyVariant()
+
+            if (!this.parseHash()) {
+                this.applyVariant()
+            }
         }
         
         public addGoal(name: string): Goal {
@@ -96,6 +99,32 @@ module MultiPass {
             let isInreal = Math.random() <= this.sample;
             this.storage.set(this.name + ':isIn', isInreal);
             return isInreal;
+        }
+
+        private parseHash(): boolean {
+            var hash = window.location.hash;
+            if(hash.indexOf('#') === 0) hash = hash.slice(1,hash.length);
+
+            var pairs = hash.split('&');
+            for(var i = 0; i < pairs.length; i++) {
+                var pair = pairs[i].split('=');
+                var testName = pair[0];
+                var variantName = pair[1];
+
+                if(this.name === testName) {
+                    console.log(Object.keys(this.variants));
+                    if (Object.keys(this.variants).indexOf(variantName) !== -1) {
+                        let variant: IVariant = this.variants[variantName];
+                        variant.activate(this);
+
+                        this.storage.set(this.name + ":variant", variantName);
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }

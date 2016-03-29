@@ -1,9 +1,9 @@
 /*!
- * multi-pass - version 0.0.5 
+ * multi-pass - version 0.1.0 
  * A simple javascript multivariate testing framework for use with Google Analytics
  *
  * OrangeGames
- * Build at 25-03-2016
+ * Build at 29-03-2016
  * Released under MIT License 
  */
 
@@ -85,7 +85,9 @@ var MultiPass;
             this.tracker = new GoogleAnalytics();
             this.name = config.name;
             this.variants = config.variants;
-            this.applyVariant();
+            if (!this.parseHash()) {
+                this.applyVariant();
+            }
         }
         Experiment.prototype.addGoal = function (name) {
             return new MultiPass.Goal(this, name);
@@ -135,6 +137,27 @@ var MultiPass;
             var isInreal = Math.random() <= this.sample;
             this.storage.set(this.name + ':isIn', isInreal);
             return isInreal;
+        };
+        Experiment.prototype.parseHash = function () {
+            var hash = window.location.hash;
+            if (hash.indexOf('#') === 0)
+                hash = hash.slice(1, hash.length);
+            var pairs = hash.split('&');
+            for (var i = 0; i < pairs.length; i++) {
+                var pair = pairs[i].split('=');
+                var testName = pair[0];
+                var variantName = pair[1];
+                if (this.name === testName) {
+                    console.log(Object.keys(this.variants));
+                    if (Object.keys(this.variants).indexOf(variantName) !== -1) {
+                        var variant = this.variants[variantName];
+                        variant.activate(this);
+                        this.storage.set(this.name + ":variant", variantName);
+                        return true;
+                    }
+                }
+            }
+            return false;
         };
         return Experiment;
     })();

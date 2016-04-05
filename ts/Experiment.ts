@@ -11,7 +11,7 @@ module MultiPass {
         name: string;
         variants: {
             [name: string]: IVariant;
-        }
+        };
         sample?: number;
     }
 
@@ -33,91 +33,122 @@ module MultiPass {
             this.variants = config.variants;
 
             if (!this.parseHash()) {
-                this.applyVariant()
+                this.applyVariant();
             }
         }
-        
+
+        /**
+         * This creates a new goal for the current experiment
+         *
+         * @param name
+         * @returns {MultiPass.Goal}
+         */
         public addGoal(name: string): Goal {
             return new Goal(this, name);
         }
 
+        /**
+         * Used to complete a goal
+         *
+         * @param name
+         * @param unqiue
+         */
         public completeGoal(name: string, unqiue: boolean = true): void {
-            if (unqiue && this.storage.get(this.name + ":" + name)) {
+            if (unqiue && this.storage.get(this.name + ':' + name)) {
                 return;
             }
 
-            let variant: string = this.storage.get(this.name + ":variant")
+            let variant: string = this.storage.get(this.name + ':variant');
             if (!variant) {
                 return;
             }
 
             if (unqiue) {
-                this.storage.set(this.name + ":" + name, true);
+                this.storage.set(this.name + ':' + name, true);
             }
 
             return this.tracker.complete(this.name, variant, name);
         }
-        
+
+        /**
+         * This picks one of the variants available and sets up the experiment
+         *
+         * @returns {string}
+         */
         private applyVariant(): string {
-            let variantName: string = this.storage.get(this.name + ":variant");
+            let variantName: string = this.storage.get(this.name + ':variant');
             if (!this.inSample()) {
                 return;
             }
-            
+
             if (variantName === null) {
                 variantName = this.chooseVariant();
                 this.tracker.start(this.name, variantName);
             }
 
-            let varient: IVariant;
-            if ((varient = this.variants[variantName]) != null) {
-                varient.activate(this);
+            let variant: IVariant = this.variants[variantName];
+            if (variant !== null) {
+                variant.activate(this);
             }
 
-            this.storage.set(this.name + ":variant", variantName);
+            this.storage.set(this.name + ':variant', variantName);
 
             return variantName;
         }
 
+        /**
+         * This picks one of the variants
+         *
+         * @returns {string}
+         */
         private chooseVariant(): string {
             let variants: string [] = Object.keys(this.variants);
 
             let part: number = 1.0 / variants.length;
             let pickedPart: number = Math.floor(Math.random() / part);
 
-            let variant: string = variants[pickedPart];
-
-            return variant;
+            return variants[pickedPart];
         }
 
+        /**
+         * Check if the person is within the sampple size
+         *
+         * @returns {boolean}
+         */
         private inSample(): boolean {
-            let isIn: string = this.storage.get(this.name +  ':isIn');
+            let isIn: string = this.storage.get(this.name + ':isIn');
             if (null !== isIn) {
                 return isIn === 'true';
             }
 
-            let isInreal = Math.random() <= this.sample;
+            let isInreal: boolean = Math.random() <= this.sample;
             this.storage.set(this.name + ':isIn', isInreal);
             return isInreal;
         }
 
+        /**
+         * Parses the string behind the hash in a url, used to force any variants
+         *
+         * @returns {boolean}
+         */
         private parseHash(): boolean {
-            var hash = window.location.hash;
-            if(hash.indexOf('#') === 0) hash = hash.slice(1,hash.length);
+            let hash: string = window.location.hash;
+            if (hash.indexOf('#') === 0) {
+                hash = hash.slice(1, hash.length);
+            }
 
-            var pairs = hash.split('&');
-            for(var i = 0; i < pairs.length; i++) {
-                var pair = pairs[i].split('=');
-                var testName = pair[0];
-                var variantName = pair[1];
+            let pairs: string[] = hash.split('&');
+            for (let i: number = 0; i < pairs.length; i++) {
+                let pair: string[] = pairs[i].split('=');
+                let testName: string = pair[0];
+                let variantName: string = pair[1];
 
-                if(this.name === testName) {
-                    console.log(Object.keys(this.variants));
+                if (this.name === testName) {
                     if (Object.keys(this.variants).indexOf(variantName) !== -1) {
                         let variant: IVariant = this.variants[variantName];
                         variant.activate(this);
 
-                        this.storage.set(this.name + ":variant", variantName);
+                        this.storage.set(this.name + ':variant', variantName);
 
                         return true;
                     }

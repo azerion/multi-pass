@@ -11,7 +11,10 @@ module MultiPass {
             this.name = name;
             this.unique = unique;
         }
-        
+
+        /**
+         * Should be called when a goal is completed
+         */
         public complete(): void {
             this.experiment.completeGoal(this.name, this.unique);
         }

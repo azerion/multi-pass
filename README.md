@@ -9,7 +9,7 @@ Key Features:
 * Tracks unique visitors and goal completions
 * Ideal for use with page and fragment caching
 * Developer-friendly for both usage and contirbution (using npm / browserify)
-* less than 5kb when minified and gzipped with no external dependencies
+* less than 5kb when minified and gzipped
 * Force load a variant for testing purposes
 * Included TypeScript support
 * Ideal for HTML5 games

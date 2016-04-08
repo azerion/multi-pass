@@ -1,7 +1,7 @@
 {
   "name": "multi-pass",
   "author": "OrangeGames",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A simple javascript multivariate testing framework for use with Google Analytics",
   "contributors": [
     {
@@ -25,7 +25,7 @@
     "grunt-contrib-clean": "0.6.0",
     "grunt-contrib-uglify": "^0.11.0",
     "grunt-typescript": "0.8.0",
-    "quartz-storage": "^2.0.1",
+    "quartz-storage": "^2.0.2",
     "typescript": "1.8.x"
   },
   "engines": {

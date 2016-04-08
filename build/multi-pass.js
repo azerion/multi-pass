@@ -1,9 +1,9 @@
 /*!
- * multi-pass - version 0.1.1 
+ * multi-pass - version 0.1.2 
  * A simple javascript multivariate testing framework for use with Google Analytics
  *
  * OrangeGames
- * Build at 05-04-2016
+ * Build at 08-04-2016
  * Released under MIT License 
  */
 
